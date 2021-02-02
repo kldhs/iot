@@ -55,6 +55,7 @@
         <querydsl-jpa.version>5.0.0</querydsl-jpa.version>
         <hibernate-validator.version>6.2.3.Final</hibernate-validator.version>
         <hibernate-types-55.version>2.16.2</hibernate-types-55.version>
+        <commons-codec.version>1.15</commons-codec.version>
 
         <!--//////////////////////////////////-->
 
@@ -206,6 +207,12 @@
                 <groupId>com.blazebit</groupId>
                 <artifactId>blaze-persistence-integration-querydsl-expressions</artifactId>
                 <version>${blaze-persistence.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons-codec.version}</version>
             </dependency>
 
 

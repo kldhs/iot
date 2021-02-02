@@ -4,17 +4,30 @@ package com.iot.security.service.impl;
 
 
 import com.iot.common.dao.company.SysCompanyDao;
+import com.iot.common.dao.permission.SysPermissionDao;
+import com.iot.common.dao.permission.SysRolePermissionDao;
+import com.iot.common.dao.user.SysRoleDao;
+import com.iot.common.dao.user.SysUserDao;
+import com.iot.common.dao.user.SysUserRoleDao;
 import com.iot.common.data.constant.CommonResult;
 import com.iot.common.data.constant.RedisKeyConstant;
 import com.iot.common.data.constant.SysUserStatusEnum;
+import com.iot.common.data.constant.SystemConstant;
 import com.iot.common.data.enums.CompanyStatusEnum;
 import com.iot.common.data.enums.ResultEnum;
+import com.iot.common.data.enums.RoleLevelEnum;
+import com.iot.common.data.enums.SysScopeEnum;
+import com.iot.common.data.model.bo.VerificationCode;
+import com.iot.common.data.model.bo.gateway.UserInfo;
 import com.iot.common.entity.company.CompanyEntity;
+import com.iot.common.entity.permission.PermissionEntity;
+import com.iot.common.entity.permission.RolePermissionEntity;
 import com.iot.common.entity.user.RoleEntity;
 import com.iot.common.entity.user.UserEntity;
 import com.iot.common.entity.user.UserRoleEntity;
 import com.iot.common.microservice.util.UserInfoContext;
 import com.iot.common.util.HttpResponseUtil;
+import com.iot.common.util.RsaKeyHelper;
 import com.iot.common.util.jwt.JwtToken;
 import com.iot.common.util.redis.RedisUtil;
 import com.iot.security.service.AuthTokenService;
@@ -23,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
@@ -33,6 +47,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.iot.common.data.constant.UserConstant.PASSWORD_ERROR_TIMES;
+import static com.iot.common.data.constant.UserConstant.VERIFICATION_CODE;
 
 
 @Service("AuthTokenServiceImpl")
@@ -50,7 +66,6 @@ public class AuthTokenServiceImpl implements AuthTokenService {
     private final SysRoleDao sysRoleDao;
     private final SysPermissionDao sysPermissionDao;
     private final RedisUtil<?> redisUtil;
-    private final PermissionService permissionService;
 
     public AuthTokenServiceImpl(SysUserDao sysUserDao,
                                 SysUserRoleDao sysUserRoleDao,
@@ -59,8 +74,7 @@ public class AuthTokenServiceImpl implements AuthTokenService {
                                 RedisUtil<?> redisUtil,
                                 SysRolePermissionDao sysRolePermissionDao,
                                 SysRoleDao sysRoleDao,
-                                SysPermissionDao sysPermissionDao,
-                                PermissionService permissionService) {
+                                SysPermissionDao sysPermissionDao) {
         this.sysUserDao = sysUserDao;
         this.userRoleDao = sysUserRoleDao;
         this.companyDao = companyDao;
@@ -69,7 +83,6 @@ public class AuthTokenServiceImpl implements AuthTokenService {
         this.sysRolePermissionDao = sysRolePermissionDao;
         this.sysRoleDao = sysRoleDao;
         this.sysPermissionDao = sysPermissionDao;
-        this.permissionService = permissionService;
     }
 
     public ResultEnum checkCompanyAndAccountValid(UserEntity user) {
@@ -123,14 +136,12 @@ public class AuthTokenServiceImpl implements AuthTokenService {
             }else {
                 //获取用户角色
                 var userRole = userRoleDao.findUserRoleInfoByUserId(user.getId());
-                UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(), userRole.getRoleId(), user.getCompanyId(), user.getCompanyCode(),
-                        SysScopeEnum.findScope(userRole.getAdmin()).getValue(),userRole.getRoleLevel());
-                String token = JwtToken.signTokenString(userInfo, SystemConstant.SYS_JWT_TOKEN_ISSUER);
-                //获取权限
-                permissionService.getPermissionsByRoleId(userRole.getRoleId());
+                UserInfo userInfo = new UserInfo(user.getId(), userRole.getRoleId(), user.getCompanyId(),
+                        SysScopeEnum.findScope(userRole.getAdmin()).getValue());
+                String token = JwtToken.getToken(userInfo, SystemConstant.SYS_JWT_TOKEN_ISSUER);
                 //存入缓存
                 int cacheTokenCode = Objects.hashCode(token) & Integer.MAX_VALUE;
-                redisUtil.set(RedisKeyConstant.SYS_USER_LOGIN_DATA_PREFIX+userInfo.username(), String.valueOf(cacheTokenCode),RedisKeyConstant.SYS_USER_LOGIN_DATA_PREFIX_EX);
+                redisUtil.set(RedisKeyConstant.SYS_USER_LOGIN_DATA_PREFIX+userInfo.userId(), String.valueOf(cacheTokenCode),RedisKeyConstant.SYS_USER_LOGIN_DATA_PREFIX_EX);
                 Map<String, String> tokenMap = new HashMap<>();
                 tokenMap.put("token", token);
                 result = CommonResult.success(tokenMap);
@@ -147,8 +158,9 @@ public class AuthTokenServiceImpl implements AuthTokenService {
     public CommonResult<Object> logout() {
         String username = UserInfoContext.getUsername();
         //清除缓存信息
-        if(StringUtils.hasText(username))
-           redisUtil.remove(RedisKeyConstant.SYS_USER_LOGIN_DATA_PREFIX+username);
+        if(StringUtils.hasText(username)) {
+            redisUtil.remove(RedisKeyConstant.SYS_USER_LOGIN_DATA_PREFIX+username);
+        }
         return CommonResult.success();
     }
 

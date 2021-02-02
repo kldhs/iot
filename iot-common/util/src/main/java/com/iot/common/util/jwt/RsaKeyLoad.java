@@ -26,7 +26,7 @@ public class RsaKeyLoad {
      * 加载jks文件
      * @return
      */
-    static RSAKey getRsaKey() {
+    public static RSAKey getRsaKey() {
         //从classpath下获取RSA秘钥对，密码为生成jks文件时设置的密码
         KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource(JWT_KEY_PATH), JKS_PASSWORD.toCharArray());
         KeyPair keyPair = keyStoreKeyFactory.getKeyPair("JKS", JKS_PASSWORD.toCharArray());
