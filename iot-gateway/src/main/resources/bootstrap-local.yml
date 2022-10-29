@@ -1,0 +1,118 @@
+environment: local
+server:
+  ssl:
+    enabled: false
+management:
+  security:
+    user:
+      name : admin
+      password : admin
+      roles : ADMIN
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    default-property-inclusion: NON_NULL
+    time-zone: GMT+8
+  servlet:
+    multipart:
+      file-size-threshold: 100MB
+      max-file-size: 4GB
+      max-request-size: 4GB
+  thymeleaf:
+    cache: false
+    mode: LEGACYHTML5
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      enabled: true
+      routes:
+        # 推送
+        - id:  tota-shared-log
+          uri: lb://tota-push
+          predicates:
+            - Path=/mgapi/push/**
+          filters:
+            - name: Hystrix
+              args:
+                name: tota-push
+                fallbackUri: forward:/fallback
+            - name: StripPrefix
+              args:
+                parts: 2
+            - name: SessionAccess
+              args:
+                ignorePath:
+                  - /static
+                  - /client-api
+                  - /busi
+                  - /zuul
+                  - swagger
+                  - /v2/api-docs
+                  - /csrf
+                  - /taskpush/thirdParty
+        - id: tota-delta-online
+          uri: lb://tota-delta-online
+          predicates:
+            - Path=/mgapi/delta-online/**
+          filters:
+            - name: Hystrix
+              args:
+                name: tota-delta-online
+                fallbackUri: forward:/fallback
+            - name: StripPrefix
+              args:
+                parts: 2
+            - name: SessionAccess
+              args:
+                ignorePath:
+                  - swagger
+                  - /v2/api-docs
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 400000
+    tota-push:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 2401000
+    tota-delta-online:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 2401000
+
+ribbon:
+  ConnectTimeout: 500000
+  MaxAutoRetries: 0
+  MaxAutoRetriesNextServer: 1
+  MaxHttpConnectionsPerHosts: 200
+  OkToRetryOnAllOperations: true
+  ReadTimeout: 1200000
+  okToRetryOnAllErrors: true
+tota-push:
+  ribbon:
+    ConnectTimeout: 300000
+    MaxAutoRetries: 0
+    MaxAutoRetriesNextServer: 1
+    OkToRetryOnAllOperations: true
+    ReadTimeout: 1200000
+tota-delta-online:
+  ribbon:
+    ConnectTimeout: 300000
+    MaxAutoRetries: 0
+    MaxAutoRetriesNextServer: 1
+    OkToRetryOnAllOperations: true
+    ReadTimeout: 1200000
+
+feignservice:
+  address:
+    upgrade: tota-upgrade
+gate:
+  ignore:
+    startWith: /mgapi,/static,/client-api,/busi,/zuul,/asop
