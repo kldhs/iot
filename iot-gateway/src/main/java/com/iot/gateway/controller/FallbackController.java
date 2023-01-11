@@ -1,4 +1,4 @@
-package com.iot.controller;
+package com.iot.gateway.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,7 @@ public class FallbackController {
     Logger logger = LoggerFactory.getLogger(FallbackController.class);
 
     /**
-     * 进入Hystrix熔断降级机制时，就会调用该方法
+     * 进入熔断降级机制时，就会调用该方法
      *
      * @param exchange
      * @return

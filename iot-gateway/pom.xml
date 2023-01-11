@@ -12,24 +12,60 @@
     </parent>
 
     <artifactId>iot-gateway</artifactId>
+    <groupId>com.iot</groupId>
+    <version>1.0-SNAPSHOT</version>
+    <name>iot-gateway</name>
 
     <dependencies>
 
-
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bootstrap</artifactId>
+        </dependency>
+
+        <!--//////////////////////// -->
+
+        <dependency>
+            <groupId>com.iot.common</groupId>
+            <artifactId>util</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>javax.servlet-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.iot</groupId>
+            <artifactId>iot-security</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.iot.common</groupId>
+            <artifactId>feign-api</artifactId>
         </dependency>
 
     </dependencies>
 
     <build><!--编译设置，全局配置（位于project下）针对整个项目的配置；不同profile配置（位于profiles）针对不同的profile配置-->
-<!--        <finalName>gateway</finalName>--><!--指定最后的包名称-->
+        <!--        <finalName>gateway</finalName>--><!--指定最后的包名称-->
         <plugins><!--编译过程中使用的插件-->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -43,7 +79,7 @@
                 </executions>
                 <configuration>
                     <includeSystemScope>true</includeSystemScope><!--打包时会将外部引入的jar，如根目录、resource文件添加的外部jar包，打包到项目-->
-                    <mainClass>com.iot.GatewayServerApplication</mainClass><!--打包时主函数入口-->
+                    <mainClass>com.iot.gateway.GatewayApplication</mainClass><!--打包时主函数入口-->
                 </configuration>
             </plugin>
 
