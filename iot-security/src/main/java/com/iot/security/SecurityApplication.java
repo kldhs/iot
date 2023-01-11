@@ -1,10 +1,7 @@
-package com.iot;
+package com.iot.security;
 
-/**
- * Hello world!
- *
- */
-public class App 
+
+public class SecurityApplication
 {
     public static void main( String[] args )
     {
