@@ -19,19 +19,43 @@
 
     <modules>
         <module>iot-gateway</module>
-        <module>iot-auth</module>
+        <module>iot-security</module>
         <module>iot-consumer</module>
         <module>iot-mgmt</module>
         <module>iot-common</module>
         <module>iot-file</module>
+        <module>iot-external-api</module>
+        <module>iot-task-schedule</module>
+        <module>iot-common/microservice</module>
     </modules>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <spring-cloud.version>2021.0.3</spring-cloud.version>
+        <spring-cloud-alibaba.version>2021.0.1.0</spring-cloud-alibaba.version>
         <spring-gateway.version>3.1.3</spring-gateway.version>
         <slf4j-api.version>1.7.36</slf4j-api.version>
+        <nimbus-jose-jwt.version>9.23</nimbus-jose-jwt.version>
+        <hutool-all.version>5.7.22</hutool-all.version>
+        <spring-core.version>5.3.20</spring-core.version>
+        <spring-security-rsa.version>1.0.10.RELEASE</spring-security-rsa.version>
+        <junit.version>4.13.2</junit.version>
+        <redis.version>2.6.8</redis.version>
+        <json-unit.version>2.35.0</json-unit.version>
+        <jackson.version>2.13.3</jackson.version>
+        <spring-security.version>5.6.5</spring-security.version>
+        <starter-security.version>2.6.8</starter-security.version>
+        <feign.version>3.1.3</feign.version>
+        <springdoc.version>1.6.6</springdoc.version>
+        <starter-bootstrap.version>3.1.3</starter-bootstrap.version>
+        <spring-boot-starter-web.version>1.5.9.RELEASE</spring-boot-starter-web.version>
+        <!--//////////////////////////////////-->
+
+        <feign-api.version>1.0-SNAPSHOT</feign-api.version>
+        <data.version>1.0-SNAPSHOT</data.version>
+        <util.version>1.0-SNAPSHOT</util.version>
+        <iot-security.version>1.0-SNAPSHOT</iot-security.version>
     </properties>
 
     <dependencyManagement><!--声明jar版本并不实现注入，子项目优先会在dependencies里的dependency中查找版本，如果没有会在dependencyManagement中查找。
@@ -47,6 +71,26 @@
             </dependency>
 
             <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-bootstrap</artifactId>
+                <version>${starter-bootstrap.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>${spring-boot-starter-web.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-gateway</artifactId>
                 <version>${spring-gateway.version}</version>
@@ -57,6 +101,106 @@
                 <artifactId>slf4j-api</artifactId>
                 <version>${slf4j-api.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.nimbusds</groupId>
+                <artifactId>nimbus-jose-jwt</artifactId>
+                <version>${nimbus-jose-jwt.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool-all.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-core</artifactId>
+                <version>${spring-core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-rsa</artifactId>
+                <version>${spring-security-rsa.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-redis</artifactId>
+                <version>${redis.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-core</artifactId>
+                <version>${spring-security.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-security</artifactId>
+                <version>${starter-security.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-openfeign</artifactId>
+                <version>${feign.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-ui</artifactId>
+                <version>${springdoc.version}</version>
+            </dependency>
+
+
+            <!--//////////////////////// -->
+
+            <dependency>
+                <groupId>com.iot.common</groupId>
+                <artifactId>data</artifactId>
+                <version>${data.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.iot.common</groupId>
+                <artifactId>util</artifactId>
+                <version>${util.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.iot.common</groupId>
+                <artifactId>feign-api</artifactId>
+                <version>${feign-api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.iot</groupId>
+                <artifactId>iot-security</artifactId>
+                <version>${iot-security.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-bootstrap</artifactId>
+                <version>3.1.3</version>
+            </dependency>
+
 
         </dependencies>
     </dependencyManagement>
