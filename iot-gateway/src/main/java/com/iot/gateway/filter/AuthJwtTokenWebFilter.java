@@ -20,9 +20,13 @@ import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
+
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * 请求头中获取用户数据
+ */
 @Component
 public class AuthJwtTokenWebFilter implements WebFilter {
 
@@ -38,12 +42,14 @@ public class AuthJwtTokenWebFilter implements WebFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         String token = exchange.getRequest().getHeaders().getFirst("Authorization");
-        if (StringUtils.hasText(token) && !ignorePathConfig.exist(exchange.getRequest().getPath().toString())){
+        //token存在且路径不在白名单中
+        if (StringUtils.hasText(token) && !ignorePathConfig.exist(exchange.getRequest().getPath().toString())) {
             UserInfo userInfo = requestTokenCheck(token);
-            if (Objects.isNull(userInfo)){
+            //用户信息不存在
+            if (Objects.isNull(userInfo)) {
                 var res = CommonResult.failed(ResultEnum.TOKEN_INVALID_ERR);
                 exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-                return HttpResponseUtil.sendJsonMsg(exchange,res);
+                return HttpResponseUtil.sendJsonMsg(exchange, res);
             }
             //检查缓存数据
             boolean exists = redisUtil.exists(RedisKeyConstant.SYS_USER_LOGIN_DATA_PREFIX + userInfo.userId());
@@ -53,6 +59,7 @@ public class AuthJwtTokenWebFilter implements WebFilter {
                 return chain.filter(exchange).subscribeOn(Schedulers.boundedElastic()).contextWrite(ReactiveSecurityContextHolder.withAuthentication(authenticationToken));
             }
         }
+        //token不存在或者路径在白名单中
         return chain.filter(exchange);
     }
 

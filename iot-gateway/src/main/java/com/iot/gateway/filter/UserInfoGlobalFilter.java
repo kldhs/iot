@@ -29,6 +29,7 @@ public class UserInfoGlobalFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String auth = exchange.getRequest().getHeaders().getFirst(AUTH_HEADER);
+        //请求头中存在格式正确的token信息，解析出用户信息并放入请求头中
         if (StringUtils.hasText(auth) && auth.contains(AUTH_BEARER)) {
             String token = auth.replace(AUTH_BEARER, "").trim();
             log.debug("token={}", token);

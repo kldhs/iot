@@ -37,11 +37,13 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeExchange()
                 .pathMatchers(HttpMethod.OPTIONS).permitAll()
-                .pathMatchers(ignorePathConfig.getMergePathsArray()).permitAll()
-                .anyExchange().access(authorizationManager)
+                .pathMatchers(ignorePathConfig.getMergePathsArray()).permitAll() // 白名单配置
+                .anyExchange().access(authorizationManager)// 鉴权管理器配置
                 .and().formLogin().disable()
                 .logout().disable()
-                .exceptionHandling().authenticationEntryPoint(serverAuthenticationEntryPoint).accessDeniedHandler(serverAccessDeniedHandler)
+                .exceptionHandling()
+                .authenticationEntryPoint(serverAuthenticationEntryPoint)// 处理未认证
+                .accessDeniedHandler(serverAccessDeniedHandler) // 处理未授权
                 .and()
                 .addFilterBefore(authJwtTokenWebFilter, SecurityWebFiltersOrder.HTTP_BASIC);
         return httpSecurity.build();
