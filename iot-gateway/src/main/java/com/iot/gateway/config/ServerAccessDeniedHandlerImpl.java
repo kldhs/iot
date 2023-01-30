@@ -25,6 +25,7 @@ public class ServerAccessDeniedHandlerImpl implements ServerAccessDeniedHandler 
     public Mono<Void> handle(ServerWebExchange exchange, AccessDeniedException denied) {
         String path = exchange.getRequest().getURI().getPath();
         log.warn("path={}, access deny", path);
+        String a       = "1111";
         var result = CommonResult.failed(ResultEnum.ACCESS_DENY);
         var response = exchange.getResponse();
         var dbf = response.bufferFactory();
