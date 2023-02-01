@@ -1,19 +1,17 @@
 package com.iot.common.feignapi.security;
 
 
+
 import com.iot.common.data.constant.CommonResult;
-import com.iot.common.data.model.entity.security.UserRoleInfo;
 import com.iot.common.data.model.vo.security.DataPermissionInfoVo;
 import com.iot.common.data.model.dto.security.SysPermissionDto;
+import com.iot.common.entity.security.UserRoleInfo;
 import com.iot.common.feignapi.security.fallback.SecurityApiServiceFallback;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * @author wzh
- */
 @FeignClient(value = "security-service", path = "/internal", fallbackFactory = SecurityApiServiceFallback.class)
 public interface SecurityApiService {
 

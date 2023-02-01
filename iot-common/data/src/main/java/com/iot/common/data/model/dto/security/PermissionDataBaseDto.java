@@ -2,7 +2,7 @@ package com.iot.common.data.model.dto.security;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.iot.common.data.model.bo.PageAndSearch;
+import com.iot.common.data.model.bo.page.PageAndSearch;
 import com.iot.common.data.model.vo.security.DataPermissionInfoVo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;

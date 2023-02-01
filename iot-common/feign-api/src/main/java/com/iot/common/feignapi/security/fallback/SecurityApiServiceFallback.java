@@ -3,8 +3,8 @@ package com.iot.common.feignapi.security.fallback;
 import com.iot.common.data.constant.CommonResult;
 import com.iot.common.data.enums.ResultEnum;
 import com.iot.common.data.model.dto.security.SysPermissionDto;
-import com.iot.common.data.model.entity.security.UserRoleInfo;
 import com.iot.common.data.model.vo.security.DataPermissionInfoVo;
+import com.iot.common.entity.security.UserRoleInfo;
 import com.iot.common.feignapi.security.SecurityApiService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
@@ -12,9 +12,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-/**
- * @author wzh
- */
 @Slf4j
 @Component
 public class SecurityApiServiceFallback implements FallbackFactory<SecurityApiService> {

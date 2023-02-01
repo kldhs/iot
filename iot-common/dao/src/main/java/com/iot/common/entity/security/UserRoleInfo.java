@@ -1,4 +1,4 @@
-package com.iot.common.data.model.entity.security;
+package com.iot.common.entity.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

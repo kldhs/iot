@@ -1,4 +1,4 @@
-package com.iot.common.data.model.bo;
+package com.iot.common.data.model.bo.page;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;

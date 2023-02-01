@@ -50,6 +50,12 @@
         <springdoc.version>1.6.6</springdoc.version>
         <starter-bootstrap.version>3.1.3</starter-bootstrap.version>
         <spring-boot-starter-web.version>1.5.9.RELEASE</spring-boot-starter-web.version>
+        <spring-boot-starter-data-jpa.version>2.6.8</spring-boot-starter-data-jpa.version>
+        <blaze-persistence.version>1.6.6</blaze-persistence.version>
+        <querydsl-jpa.version>5.0.0</querydsl-jpa.version>
+        <hibernate-validator.version>6.2.3.Final</hibernate-validator.version>
+        <hibernate-types-55.version>2.16.2</hibernate-types-55.version>
+
         <!--//////////////////////////////////-->
 
         <feign-api.version>1.0-SNAPSHOT</feign-api.version>
@@ -168,6 +174,40 @@
                 <version>${springdoc.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-jpa</artifactId>
+                <version>${spring-boot-starter-data-jpa.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.blazebit</groupId>
+                <artifactId>blaze-persistence-core-api</artifactId>
+                <version>${blaze-persistence.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.querydsl</groupId>
+                <artifactId>querydsl-jpa</artifactId>
+                <version>${querydsl-jpa.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.hibernate.validator</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>${hibernate-validator.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.vladmihalcea</groupId>
+                <artifactId>hibernate-types-55</artifactId>
+                <version>${hibernate-types-55.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.blazebit</groupId>
+                <artifactId>blaze-persistence-integration-querydsl-expressions</artifactId>
+                <version>${blaze-persistence.version}</version>
+            </dependency>
+
 
             <!--//////////////////////// -->
 
@@ -194,13 +234,6 @@
                 <artifactId>iot-security</artifactId>
                 <version>${iot-security.version}</version>
             </dependency>
-
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-bootstrap</artifactId>
-                <version>3.1.3</version>
-            </dependency>
-
 
         </dependencies>
     </dependencyManagement>

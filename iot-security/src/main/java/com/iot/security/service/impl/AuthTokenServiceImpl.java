@@ -1,42 +1,28 @@
 package com.iot.security.service.impl;
 
-import com.abupdate.ucc.common.cache.RedisUtil;
-import com.abupdate.ucc.common.data.constant.RedisKeyConstant;
-import com.abupdate.ucc.common.data.constant.SystemConstant;
-import com.abupdate.ucc.common.data.enums.CompanyStatusEnum;
-import com.abupdate.ucc.common.data.enums.RoleLevelEnum;
-import com.abupdate.ucc.common.data.enums.SysScopeEnum;
-import com.abupdate.ucc.common.data.enums.SysUserStatusEnum;
-import com.abupdate.ucc.common.data.result.CommonResult;
-import com.abupdate.ucc.common.data.result.ResultEnum;
-import com.abupdate.ucc.common.util.RsaKeyHelper;
-import com.abupdate.ucc.common.util.UserInfoContext;
-import com.abupdate.ucc.common.util.VerificationCode;
-import com.abupdate.ucc.common.util.jwt.JwtToken;
-import com.abupdate.ucc.common.util.model.UserInfo;
-import com.abupdate.ucc.dao.company.SysCompanyDao;
-import com.abupdate.ucc.dao.model.entity.CompanyEntity;
-import com.abupdate.ucc.dao.model.entity.RoleEntity;
-import com.abupdate.ucc.dao.model.entity.UserEntity;
-import com.abupdate.ucc.dao.model.entity.UserRoleEntity;
-import com.abupdate.ucc.dao.model.entity.permission.PermissionEntity;
-import com.abupdate.ucc.dao.model.entity.permission.RolePermissionEntity;
-import com.abupdate.ucc.dao.permission.SysPermissionDao;
-import com.abupdate.ucc.dao.permission.SysRolePermissionDao;
-import com.abupdate.ucc.dao.user.SysRoleDao;
-import com.abupdate.ucc.dao.user.SysUserDao;
-import com.abupdate.ucc.dao.user.SysUserRoleDao;
-import com.abupdate.ucc.service.AuthTokenService;
-import com.abupdate.ucc.service.PermissionService;
-import com.abupdate.ucc.util.HttpResponseUtil;
+
+
+
+import com.iot.common.dao.company.SysCompanyDao;
 import com.iot.common.data.constant.CommonResult;
+import com.iot.common.data.constant.RedisKeyConstant;
+import com.iot.common.data.constant.SysUserStatusEnum;
+import com.iot.common.data.enums.CompanyStatusEnum;
 import com.iot.common.data.enums.ResultEnum;
+import com.iot.common.entity.company.CompanyEntity;
+import com.iot.common.entity.user.RoleEntity;
+import com.iot.common.entity.user.UserEntity;
+import com.iot.common.entity.user.UserRoleEntity;
+import com.iot.common.microservice.util.UserInfoContext;
+import com.iot.common.util.HttpResponseUtil;
+import com.iot.common.util.jwt.JwtToken;
+import com.iot.common.util.redis.RedisUtil;
+import com.iot.security.service.AuthTokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
