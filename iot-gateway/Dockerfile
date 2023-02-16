@@ -1,7 +1,9 @@
+#基础镜像
 FROM eclipse-temurin:17.0.4.1_1-jdk as builder
-WORKDIR app
-
-ADD ./target/*.jar app-service.jar
+#工作目录
+WORKDIR iot-gateway
+#将本地文件添加到容器中
+ADD ./target/*.jar iot-gateway.jar
 RUN java -Djarmode=layertools -jar app-service.jar extract
 
 FROM eclipse-temurin:17.0.4.1_1-jdk
@@ -10,20 +12,20 @@ FROM eclipse-temurin:17.0.4.1_1-jdk
 #USER ucc:ucc
 
 
-COPY --from=builder app/dependencies/ /data/app
-COPY --from=builder app/spring-boot-loader /data/app
-COPY --from=builder app/snapshot-dependencies/ /data/app
-COPY --from=builder app/application/ /data/app
+COPY --from=builder iot-gateway/dependencies/ /data/iot-gateway
+COPY --from=builder iot-gateway/spring-boot-loader /data/iot-gateway
+COPY --from=builder iot-gateway/snapshot-dependencies/ /data/iot-gateway
+COPY --from=builder iot-gateway/application/ /data/iot-gateway
 
-RUN groupadd -g 1001 ucc && \
-    useradd -u 1001 -g 1001 ucc && \
-    mkdir /home/ucc && \
+RUN groupadd -g 1001 iot && \
+    useradd -u 1001 -g 1001 iot && \
+    mkdir /home/iot && \
     mkdir /data/logs && \
-    chown -R ucc:ucc /home/ucc && \
-    chown -R ucc:ucc /data
+    chown -R iot:iot /home/iot && \
+    chown -R iot:iot /data
 
-USER ucc
-WORKDIR /data/app
+USER iot
+WORKDIR /data/iot-gateway
 EXPOSE 26610
 
 VOLUME ["/data/logs/", "/data/logs"]
