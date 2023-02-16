@@ -4,7 +4,7 @@ FROM eclipse-temurin:17.0.4.1_1-jdk as builder
 WORKDIR iot-gateway
 #将本地文件添加到容器中
 ADD ./target/*.jar iot-gateway.jar
-RUN java -Djarmode=layertools -jar app-service.jar extract
+RUN java -Djarmode=layertools -jar app-gateway.jar extract
 
 FROM eclipse-temurin:17.0.4.1_1-jdk
 
